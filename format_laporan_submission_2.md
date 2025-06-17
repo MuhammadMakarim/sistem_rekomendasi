@@ -230,8 +230,13 @@ Dengan selesainya tahap Modeling ini, kedua model rekomendasi (Content-Based dan
 Tahap Evaluation ini mengukur seberapa baik model rekomendasi yang telah dibangun dalam mencapai tujuan yang ditetapkan. Metrik evaluasi yang dipilih disesuaikan dengan jenis model dan data yang digunakan.
 
 ### **Metrik Evaluasi**
+**1. Content-Based Filtering:**
+- **Precision@k:** Mengukur seberapa banyak item yang relevan dari k item teratas yang direkomendasikan.
+- **Recall@k:** Mengukur seberapa banyak item relevan yang berhasil ditemukan oleh sistem dalam k item teratas.
+
+**2. Collaborative Filtering (SVD):**
 Menggunakan metrik Root Mean Squared Error (RMSE) untuk mengevaluasi performa model. RMSE umumnya digunakan dalam sistem rekomendasi, terutama pada pendekatan Collaborative Filtering berbasis prediksi rating, untuk mengukur akurasi prediksi model dibandingkan dengan rating aktual pengguna.
-- Formula RMSE:
+- **Formula RMSE:**
 
   $RMSE = \sqrt{\frac{1}{N} \sum_{i=1}^{N} (\hat{y}_i - y_i)^2}$
 
@@ -244,12 +249,16 @@ Pada bagian ini Anda perlu menyebutkan metrik evaluasi yang digunakan. Kemudian,
 
 ### **Hasil Proyek Berdasarkan Metrik Evaluasi**
 **Evaluasi Content-Based Filtering** <br>
-Untuk Content-Based Filtering, fungsi evaluate_content_based Anda menghitung RMSE, namun dengan cara yang sedikit berbeda dari evaluasi prediksi rating pengguna secara umum. Fungsi ini menghitung RMSE dari rating aktual item-item yang direkomendasikan terhadap rata-rata rating aktual dari kumpulan item yang direkomendasikan tersebut. Ini lebih merupakan indikator dispersi atau variasi rating dalam set rekomendasi, bukan akurasi prediksi rating pengguna secara spesifik.
-- Proses Evaluasi: Fungsi evaluate_content_based menerima DataFrame yang berisi daftar anime yang direkomendasikan (output dari recommend_content_verbose), termasuk kolom rating aktual dari anime-anime tersebut. Fungsi ini kemudian menghitung rata-rata rating dari semua anime dalam set rekomendasi tersebut. RMSE dihitung antara rating aktual setiap anime dalam set rekomendasi dengan rata-rata rating set rekomendasi tersebut.
-- Hasil (Berdasarkan Percobaan):
-    - Evaluasi Set Rekomendasi 1 (untuk anime ID 1): RMSE = 0.2728
-    - Evaluasi Set Rekomendasi 2 (untuk anime ID random): RMSE = 0.2138
-- Penjelasan Hasil: Nilai RMSE ini menunjukkan tingkat variasi rating aktual di antara anime yang direkomendasikan. RMSE yang lebih rendah pada Set 2 (0.2138) dibandingkan Set 1 (0.2728) mengindikasikan bahwa anime yang direkomendasikan pada percobaan Set 2 memiliki rating aktual yang secara internal lebih konsisten atau kurang bervariasi dibandingkan dengan Set 1. Namun, penting untuk dicatat bahwa metrik ini tidak secara langsung mengukur seberapa "baik" rekomendasi tersebut bagi pengguna target dalam arti apakah pengguna akan menyukainya, karena metrik ini hanya berbasis pada rating global anime yang direkomendasikan, bukan prediksi rating personal pengguna. Evaluasi Content-Based Filtering lebih baik dinilai secara kualitatif melalui inspeksi relevansi rekomendasi yang dihasilkan (recommend_content_verbose) dan mungkin metrik lain seperti precision@N atau recall@N jika data rating test set tersedia.
+Evaluasi model (Content-Based Filtering) menggunakan metrik Precision dan Recall memberikan gambaran tentang seberapa akurat dan komprehensif rekomendasi yang dihasilkan. Pada percobaan, evaluasi dilakukan dengan mengambil 30 anime secara acak, kemudian model menghasilkan 10 rekomendasi teratas untuk setiap anime berdasarkan kemiripan kontennya, terutama genre.
+Hasil evaluasi menunjukkan angka sebagai berikut:
+- Average Precision: 0.6167
+- Average Recall: 0.3327
+
+Interpretasi Hasil:
+1. Average Precision (0.6167): Nilai Precision rata-rata 0.6167 berarti bahwa, secara rata-rata untuk 30 anime yang diuji, sekitar 61.67% dari 10 anime yang direkomendasikan oleh model Content-Based memiliki genre yang sama atau relevan dengan anime target yang menjadi dasar rekomendasi. Ini mengindikasikan bahwa ketika model memberikan rekomendasi, sebagian besar (lebih dari setengah) dari item tersebut memang sesuai dengan preferensi genre yang diidentifikasi dari anime target. Model ini cenderung cukup baik dalam memberikan rekomendasi yang relevan dalam daftar pendek yang disajikan kepada pengguna.
+2. Average Recall (0.3327): Nilai Recall rata-rata 0.3327 berarti bahwa, secara rata-rata, model Content-Based berhasil merekomendasikan sekitar 33.27% dari total anime di dataset yang seharusnya relevan (memiliki genre yang sama dengan anime target). Nilai Recall ini menunjukkan kemampuan model untuk menemukan semua item relevan yang ada. Dalam konteks sistem rekomendasi Top-N (yang hanya memberikan daftar pendek), nilai Recall yang tidak terlalu tinggi ini adalah hal yang umum dan dapat diterima. Model berfokus untuk memberikan item yang paling mungkin disukai (Precision) daripada menemukan semua kemungkinan item yang relevan (Recall).
+
+Berdasarkan nilai Precision (0.6167), model Content-Based Filtering cukup efektif dalam memastikan bahwa mayoritas rekomendasi yang diberikan dalam daftar pendek 10 item memang relevan dari segi genre. Meskipun nilai Recall (0.3327) menunjukkan bahwa model tidak menangkap semua anime relevan yang ada di dataset, ini merupakan trade-off yang umum dalam sistem rekomendasi Top-N di mana prioritas diberikan pada akurasi dalam daftar rekomendasi yang ditampilkan kepada pengguna (Precision). Hasil ini menunjukkan bahwa model berhasil memberikan rekomendasi yang sebagian besar sesuai dengan atribut konten anime target.
 
 **Evaluasi Collaborative Filtering (SVD Model)** <br>
 Untuk Collaborative Filtering, RMSE dihitung dengan membandingkan rating yang diprediksi oleh model SVD dengan rating aktual yang ada di data pelatihan (rating > 0).
