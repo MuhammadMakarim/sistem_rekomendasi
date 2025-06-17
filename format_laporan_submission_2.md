@@ -6,7 +6,6 @@ Pada era digital saat ini, pertumbuhan konten digital, termasuk anime, sangat pe
 
 Proyek ini bertujuan untuk membangun sistem rekomendasi anime menggunakan dua pendekatan utama: Content-Based Filtering dan Collaborative Filtering.
 
-**Rubrik/Kriteria Tambahan (Opsional)**: <br>
 **Mengapa dan Bagaimana Masalah Rekomendasi Anime Perlu Diselesaikan** 
 
 Masalah utama yang dihadapi pengguna di tengah melimpahnya konten anime adalah overload informasi (information overload). Dengan ribuan judul anime tersedia, mulai dari seri televisi, film, hingga OVA, pengguna kesulitan menemukan anime yang benar-benar sesuai dengan preferensi pribadi mereka. Tanpa bantuan, proses pencarian bisa memakan waktu, membuat frustrasi, dan bahkan menyebabkan pengguna melewatkan judul-judul potensial yang sebenarnya akan sangat mereka nikmati. Ini bukan hanya merugikan pengguna secara individu, tetapi juga bagi kreator dan platform distribusi anime, karena konten mereka mungkin tidak mencapai audiens yang tepat.
@@ -59,6 +58,7 @@ Data yang digunakan dalam proyek ini adalah Anime Recommendations Database. Data
 <br>
 https://www.kaggle.com/datasets/CooperUnion/anime-recommendations-database
 <br>
+
 Dataset ini terdiri dari dua berkas CSV utama:
 1. anime.csv: Berkas ini berisi informasi metadata tentang berbagai judul anime.
 2. rating.csv: Berkas ini berisi rating yang diberikan oleh pengguna terhadap anime.
@@ -177,7 +177,9 @@ Dalam pendekatan ini, rekomendasi dibuat berdasarkan kemiripan antara fitur-fitu
     - Menyertakan visualisasi bar plot yang menampilkan skor similiaritas anime yang direkomendasikan terhadap anime target.
 - Output Top-N Recommendation (Contoh Percobaan):
     - Percobaan 1 (Target anime_id=1 - Cowbay Bebop): Fungsi recommend_content_verbose(anime_id=1, top_n=10) dipanggil. Output akan menampilkan tabel detail untuk anime ID 1 (Cowboy Bebop) dan tabel berisi 10 anime yang direkomendasikan beserta atributnya dan skor similiaritas. Bar plot akan memvisualisasikan skor similiaritas tersebut. Anime yang direkomendasikan diharapkan memiliki genre atau karakteristik lain yang serupa dengan Cowboy Bebop.
-    - Percobaan 2 (Target anime_id Random): Fungsi recommend_content_verbose dipanggil dengan anime_id yang dipilih secara acak dari dataset. Output akan menampilkan detail anime acak tersebut dan 10 rekomendasi yang serupa secara konten. Visualisasi similiaritas juga ditampilkan.
+    - Percobaan 2 (Target anime_id Random): Fungsi recommend_content_verbose dipanggil dengan anime_id yang dipilih secara acak dari dataset. Output akan menampilkan detail anime acak tersebut dan 10 rekomendasi yang serupa secara konten. Visualisasi similiaritas juga ditampilkan. <br>
+![Percobaan 1](https://raw.githubusercontent.com/MuhammadMakarim/sistem_rekomendasi/ec7a596380f9b5819220f35fff971f742ecd08f8/Gambar/percobaan1_cbf.png)
+![Percobaan 2](https://raw.githubusercontent.com/MuhammadMakarim/sistem_rekomendasi/ec7a596380f9b5819220f35fff971f742ecd08f8/Gambar/percobaan2_cbf.png)
 
 **Kelebihan & Kekurangan Content-Based Filtering:**
 - Kelebihan:
@@ -206,7 +208,9 @@ Pendekatan ini merekomendasikan item berdasarkan pola interaksi (rating) dari se
     - Fungsi recommend_cf_verbose memanggil get_top_n, mengambil detail anime yang direkomendasikan dari df_anime, menampilkan detail anime yang sudah dirating pengguna (untuk konteks) dan detail anime yang direkomendasikan (termasuk rating aktual dan prediksi rating), serta memvisualisasikan prediksi rating menggunakan bar plot.
 - Output Top-N Recommendation (Contoh Percobaan):
     - Percobaan 1 (user_id Random): Fungsi recommend_cf_verbose dipanggil dengan user_id yang dipilih secara acak dari daftar user aktif di df_rating_cf. Output akan menampilkan (jika ada) anime yang sudah dirating oleh user tersebut, diikuti oleh tabel berisi 5 anime yang direkomendasikan oleh model SVD (yang belum dirating user target) beserta detailnya, rating aktualnya (dari dataset), dan prediksi rating dari model SVD. Bar plot akan menampilkan prediksi rating dari 5 anime tersebut.
-    - Percobaan 2 (user_id Random Lain): Fungsi recommend_cf_verbose dipanggil dengan user_id acak lainnya. Output serupa dengan percobaan 1, menampilkan rekomendasi yang dipersonalisasi berdasarkan pola rating user acak kedua.
+    - Percobaan 2 (user_id Random Lain): Fungsi recommend_cf_verbose dipanggil dengan user_id acak lainnya. Output serupa dengan percobaan 1, menampilkan rekomendasi yang dipersonalisasi berdasarkan pola rating user acak kedua. <br>
+![Percobaan 1](https://raw.githubusercontent.com/MuhammadMakarim/sistem_rekomendasi/ec7a596380f9b5819220f35fff971f742ecd08f8/Gambar/percobaan1_cf.png)
+![Percobaan 2](https://raw.githubusercontent.com/MuhammadMakarim/sistem_rekomendasi/ec7a596380f9b5819220f35fff971f742ecd08f8/Gambar/percobaan2_cf.png)
 
 **Kelebihan & Kekurangan Collaborative Filtering (SVD):**
 - Kelebihan:
@@ -225,7 +229,7 @@ Dengan selesainya tahap Modeling ini, kedua model rekomendasi (Content-Based dan
 ## Evaluation
 Tahap Evaluation ini mengukur seberapa baik model rekomendasi yang telah dibangun dalam mencapai tujuan yang ditetapkan. Metrik evaluasi yang dipilih disesuaikan dengan jenis model dan data yang digunakan.
 
-**Metrik Evaluasi** <br>
+### **Metrik Evaluasi**
 Menggunakan metrik Root Mean Squared Error (RMSE) untuk mengevaluasi performa model. RMSE umumnya digunakan dalam sistem rekomendasi, terutama pada pendekatan Collaborative Filtering berbasis prediksi rating, untuk mengukur akurasi prediksi model dibandingkan dengan rating aktual pengguna.
 - Formula RMSE:
 
@@ -235,17 +239,36 @@ Menggunakan metrik Root Mean Squared Error (RMSE) untuk mengevaluasi performa mo
   - $N$ adalah jumlah pasangan prediksi-aktual yang dievaluasi.
   - $\hat{y}_i$ adalah rating yang diprediksi oleh model untuk interaksi ke-i.
   - $y_i$ adalah rating aktual yang diberikan oleh pengguna untuk interaksi ke-i.
-
-
+- Cara Kerja Metrik: RMSE menghitung rata-rata dari akar kuadrat perbedaan antara nilai prediksi dan nilai aktual. Ini memberikan nilai tunggal yang merepresentasikan "kesalahan" rata-rata model dalam memprediksi rating. Nilai RMSE yang lebih rendah menunjukkan bahwa prediksi model secara rata-rata lebih dekat dengan nilai aktual, sehingga model dianggap memiliki akurasi prediksi yang lebih baik. Karena perbedaan dikuadratkan, RMSE memberikan bobot lebih besar pada kesalahan prediksi yang besar.
 Pada bagian ini Anda perlu menyebutkan metrik evaluasi yang digunakan. Kemudian, jelaskan hasil proyek berdasarkan metrik evaluasi tersebut.
 
-Ingatlah, metrik evaluasi yang digunakan harus sesuai dengan konteks data, problem statement, dan solusi yang diinginkan.
+### **Hasil Proyek Berdasarkan Metrik Evaluasi**
+**Evaluasi Content-Based Filtering** <br>
+Untuk Content-Based Filtering, fungsi evaluate_content_based Anda menghitung RMSE, namun dengan cara yang sedikit berbeda dari evaluasi prediksi rating pengguna secara umum. Fungsi ini menghitung RMSE dari rating aktual item-item yang direkomendasikan terhadap rata-rata rating aktual dari kumpulan item yang direkomendasikan tersebut. Ini lebih merupakan indikator dispersi atau variasi rating dalam set rekomendasi, bukan akurasi prediksi rating pengguna secara spesifik.
+- Proses Evaluasi: Fungsi evaluate_content_based menerima DataFrame yang berisi daftar anime yang direkomendasikan (output dari recommend_content_verbose), termasuk kolom rating aktual dari anime-anime tersebut. Fungsi ini kemudian menghitung rata-rata rating dari semua anime dalam set rekomendasi tersebut. RMSE dihitung antara rating aktual setiap anime dalam set rekomendasi dengan rata-rata rating set rekomendasi tersebut.
+- Hasil (Berdasarkan Percobaan):
+    - Evaluasi Set Rekomendasi 1 (untuk anime ID 1): RMSE = 0.2728
+    - Evaluasi Set Rekomendasi 2 (untuk anime ID random): RMSE = 0.2138
+- Penjelasan Hasil: Nilai RMSE ini menunjukkan tingkat variasi rating aktual di antara anime yang direkomendasikan. RMSE yang lebih rendah pada Set 2 (0.2138) dibandingkan Set 1 (0.2728) mengindikasikan bahwa anime yang direkomendasikan pada percobaan Set 2 memiliki rating aktual yang secara internal lebih konsisten atau kurang bervariasi dibandingkan dengan Set 1. Namun, penting untuk dicatat bahwa metrik ini tidak secara langsung mengukur seberapa "baik" rekomendasi tersebut bagi pengguna target dalam arti apakah pengguna akan menyukainya, karena metrik ini hanya berbasis pada rating global anime yang direkomendasikan, bukan prediksi rating personal pengguna. Evaluasi Content-Based Filtering lebih baik dinilai secara kualitatif melalui inspeksi relevansi rekomendasi yang dihasilkan (recommend_content_verbose) dan mungkin metrik lain seperti precision@N atau recall@N jika data rating test set tersedia.
 
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menjelaskan formula metrik dan bagaimana metrik tersebut bekerja.
+**Evaluasi Collaborative Filtering (SVD Model)** <br>
+Untuk Collaborative Filtering, RMSE dihitung dengan membandingkan rating yang diprediksi oleh model SVD dengan rating aktual yang ada di data pelatihan (rating > 0).
+- Proses Evaluasi:
+    - Mengekstrak semua rating aktual (> 0) dari matriks pelatihan (user_matrix_train) menjadi daftar pasangan (pengguna, anime, rating aktual).
+    - Untuk setiap pasangan (pengguna, anime) dari daftar rating aktual, mencari rating yang diprediksi oleh model SVD dari matriks pred_df_svd.
+    -  Mengumpulkan semua pasangan rating aktual dan rating prediksi yang sesuai.
+    -   Menghitung RMSE antara vektor rating aktual dan vektor rating prediksi.
+- Hasil:
+    - Evaluasi Collaborative Filtering (SVD Model): RMSE = 7.2628
+- Penjelasan Hasil: Nilai RMSE sebesar 7.2628 untuk model Collaborative Filtering berbasis SVD mengindikasikan tingkat kesalahan prediksi rating yang relatif tinggi pada skala rating 0-10. Ini berarti, rata-rata, prediksi rating model SVD menyimpang sekitar 7.26 poin dari rating aktual yang diberikan pengguna di data pelatihan. Hasil ini menyarankan bahwa model SVD dengan konfigurasi saat ini mungkin tidak terlalu akurat dalam memprediksi rating eksplisit pengguna.
+Ada beberapa kemungkinan alasan untuk nilai RMSE yang tinggi ini:
+    - Sparsity Data: Meskipun sudah difilter, matriks pengguna-item masih sangat jarang. SVD dapat kesulitan menemukan pola yang kuat dari data yang sedikit.
+    - Keterbatasan Model SVD: SVD menangkap pola linier, tetapi mungkin ada pola non-linier dalam preferensi pengguna yang tidak tertangkap.
+    - Parameter Model: Jumlah faktor laten (k=50) mungkin tidak optimal.
+    - Variasi Rating Pengguna: Pengguna memiliki skala dan kriteria rating yang sangat bervariasi, membuat prediksi rating numerik yang akurat menjadi sulit.
+
+Meskipun nilai RMSE untuk CF SVD tampak tinggi, perlu diingat bahwa tujuan utama sistem rekomendasi seringkali adalah menyediakan daftar Top-N item yang relevan, bukan memprediksi rating numerik secara sempurna. Model SVD yang tidak terlalu akurat dalam prediksi rating individu masih bisa menghasilkan daftar rekomendasi Top-N yang cukup baik, terutama jika item dengan prediksi rating tertinggi cenderung relevan.
+
+Secara keseluruhan, tahap evaluasi ini memberikan gambaran kuantitatif tentang performa kedua model. Content-Based Filtering dievaluasi secara terbatas pada dispersi rating dalam set rekomendasi, sementara Collaborative Filtering dievaluasi akurasi prediksi ratingnya menggunakan RMSE. Hasil ini menunjukkan area potensial untuk peningkatan di masa depan, seperti penyesuaian parameter model atau mencoba algoritma rekomendasi lainnya.
 
 **---Ini adalah bagian akhir laporan---**
-
-_Catatan:_
-- _Anda dapat menambahkan gambar, kode, atau tabel ke dalam laporan jika diperlukan. Temukan caranya pada contoh dokumen markdown di situs editor [Dillinger](https://dillinger.io/), [Github Guides: Mastering markdown](https://guides.github.com/features/mastering-markdown/), atau sumber lain di internet. Semangat!_
-- Jika terdapat penjelasan yang harus menyertakan code snippet, tuliskan dengan sewajarnya. Tidak perlu menuliskan keseluruhan kode project, cukup bagian yang ingin dijelaskan saja.
